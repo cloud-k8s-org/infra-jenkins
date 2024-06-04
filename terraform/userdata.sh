@@ -9,6 +9,9 @@ sudo apt install caddy
 sudo rm /etc/caddy/Caddyfile
 
 cat <<EOF > /etc/caddy/Caddyfile
+{
+    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
 ${JENKINS_DOMAIN_NAME} {
   reverse_proxy localhost:8080 {
     header_up Host {host}
@@ -22,4 +25,3 @@ EOF
 sudo systemctl restart caddy
 
 sudo systemctl restart jenkins
-sudo systemctl status jenkins
