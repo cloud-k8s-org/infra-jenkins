@@ -19,7 +19,7 @@ variable "JENKINS_VPC_TAG_NAME" {
 }
 
 variable "PUBLIC_SUBNET_NAMES" {
-  type    = list(string)
+  type = list(string)
   default = ["PublicSubnet1"]
 }
 
@@ -49,7 +49,7 @@ variable "JENKINS_EC2_NAME" {
 }
 
 variable "JENKINS_IMAGE_FILTERS" {
-  type    = list(string)
+  type = list(string)
   default = ["jenkins-ami-*"]
 }
 
@@ -72,7 +72,11 @@ variable "JENKINS_AMI_OWNERS" {
 }
 
 variable "JENKINS_PUBLIC_KEY" {
-  type    = string
+  type = string
+}
+
+variable "JENKINS_ELASTIC_IP" {
+  type = string
 }
 
 /*variable "" {
