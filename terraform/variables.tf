@@ -62,17 +62,17 @@ variable "JENKINS_DOMAIN_NAME" {
   type = string
 }
 
-variable "CERTBOT_EMAIL" {
-  type = string
-}
-
-variable "JENKINS_KEY_PAIR" {
+variable "JENKINS_KEY_PAIR_NAME" {
   type    = string
   default = "jenkins_ec2"
 }
 
 variable "JENKINS_AMI_OWNERS" {
   type = list(string)
+}
+
+variable "JENKINS_PUBLIC_KEY" {
+  type    = string
 }
 
 /*variable "" {
