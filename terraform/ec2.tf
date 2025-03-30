@@ -34,3 +34,14 @@ resource "aws_instance" "jenkins_server" {
   }
 }
 
+data "aws_eip" "existing_eip" {
+  public_ip = var.JENKINS_ELASTIC_IP
+}
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.jenkins_server.id
+  allocation_id = data.aws_eip.existing_eip.id
+}
+
+output "eip_allocation_id" {
+  value = data.aws_eip.existing_eip.id
+}
