@@ -4,29 +4,24 @@ data "aws_ami" "latest_jenkins_ami" {
     name   = "name"
     values = var.JENKINS_IMAGE_FILTERS
   }
+  owners = var.JENKINS_AMI_OWNERS
 }
 
-/*resource "aws_key_pair" "ssh_key" {
-  key_name   = "jenkins_ssh"
-  public_key = var.rsa_public
-}*/
-
-data "template_file" "startup_script" {
-  template = file("${path.module}/userdata.sh")
-  vars = {
-    JENKINS_DOMAIN_NAME = var.JENKINS_DOMAIN_NAME
-    CERTBOT_EMAIL       = var.CERTBOT_EMAIL
-  }
+resource "aws_key_pair" "ec2_ssh_key" {
+  key_name   = var.JENKINS_KEY_PAIR_NAME
+  public_key = var.JENKINS_PUBLIC_KEY
 }
 
 resource "aws_instance" "jenkins_server" {
-  ami                    = data.aws_ami.latest_jenkins_ami.id
-  instance_type          = var.JENKINS_EC2_INSTANCE_TYPE
-  key_name               = var.JENKINS_KEY_PAIR
-  subnet_id              = aws_subnet.jenkins_subnet[0].id
+  ami           = data.aws_ami.latest_jenkins_ami.id
+  instance_type = var.JENKINS_EC2_INSTANCE_TYPE
+  key_name      = aws_key_pair.ec2_ssh_key.key_name
+  subnet_id     = aws_subnet.jenkins_subnet[0].id
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
-  user_data = data.template_file.startup_script.rendered
+  user_data = templatefile("${path.module}/userdata.sh", {
+    JENKINS_DOMAIN_NAME = var.JENKINS_DOMAIN_NAME
+  })
 
   root_block_device {
     delete_on_termination = true
