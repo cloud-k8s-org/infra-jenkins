@@ -21,6 +21,12 @@ resource "aws_instance" "jenkins_server" {
 
   user_data = templatefile("${path.module}/userdata.sh", {
     JENKINS_DOMAIN_NAME = var.JENKINS_DOMAIN_NAME
+    JENKINS_USERNAME =  var.JENKINS_USERNAME
+    JENKINS_PASSWORD = var.JENKINS_PASSWORD
+    GIT_USERNAME = var.GIT_USERNAME
+    GIT_PASSWORD = var.GIT_PASSWORD
+    DOCKER_USERNAME = var.DOCKER_USERNAME
+    DOCKER_PASSWORD = var.DOCKER_PASSWORD
   })
 
   root_block_device {

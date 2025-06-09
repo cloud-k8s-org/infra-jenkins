@@ -79,6 +79,33 @@ variable "JENKINS_ELASTIC_IP" {
   type = string
 }
 
+variable "GIT_USERNAME" {
+  type = string
+}
+
+variable "GIT_PASSWORD" {
+  type = string
+  sensitive = true
+}
+
+variable "DOCKER_USERNAME" {
+  type = string
+}
+
+variable "DOCKER_PASSWORD" {
+  type = string
+  sensitive = true
+}
+
+variable "JENKINS_USERNAME" {
+  type = string
+}
+
+variable "JENKINS_PASSWORD" {
+  type = string
+  sensitive = true
+}
+
 /*variable "" {
   type =
   default =

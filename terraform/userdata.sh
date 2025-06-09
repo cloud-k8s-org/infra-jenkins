@@ -1,10 +1,15 @@
 #!/bin/bash
 
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install caddy
+sudo usermod -a -G docker jenkins
+
+cat <<EOF > /etc/jenkins.env
+    DOCKER_USERNAME=${DOCKER_USERNAME}
+    DOCKER_PASSWORD=${DOCKER_PASSWORD}
+    JENKINS_USERNAME=${JENKINS_USERNAME}
+    JENKINS_PASSWORD=${JENKINS_PASSWORD}
+    GIT_USERNAME=${GIT_USERNAME}
+    GIT_PASSWORD=${GIT_PASSWORD}
+EOF
 
 sudo rm /etc/caddy/Caddyfile
 
@@ -21,6 +26,14 @@ ${JENKINS_DOMAIN_NAME} {
   }
 }
 EOF
+
+sudo mkdir -p /var/lib/jenkins/init.groovy.d
+sudo mkdir -p /var/lib/jenkins/dsl_scripts
+
+sudo cp -r /home/ubuntu/jenkins_init/. /var/lib/jenkins/init.groovy.d/
+sudo cp -r /home/ubuntu/jenkins_dsl/. /var/lib/jenkins/dsl_scripts/
+
+sudo systemctl enable jenkins
 
 sudo systemctl restart caddy
 
